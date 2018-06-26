@@ -15,116 +15,140 @@ class Calculator extends Component {
     }
   }
 
-  // this.addEventListener('keypress', (event)=> { this.setState({ content: this.state.content + event.target.value }) });
+  updateInput(key) {
+    let x = this.state
+    let content = x.content 
+    let operators = ['-','/','*','+'] 
+    if ( parseInt(key) ) {
+      console.log("handleCellClick for " + key)
+      this.handleCellClick(key)
+    } else if ( operators.includes(key) ) {
+      console.log("handleOperatorClick for" +key)
+      this.handleOperatorClick(key)
+    } else if ( key === "Enter" || key === "=" ) {
+      console.log("rendering equals")
+      this.handleEqualsClick(key)
+    } else if ( key === "Delete") { // cant yet get the "delete" key triggering from eventlistener
+      console.log("rendering delete command")
+      this.handleDeleteClick(key)
+    }else {
+      console.log( key +" is not an operator or a number")
+    }
+  }
+
+// needs work. does pop() work on a string?
+  handleDeleteClick(i) {
+    let content = this.state.content
+    content = content.pop()
+    console.log(content)
+    this.setState({ content: content })
+  }
+
+  handleCellClick(i) {
+    this.setState({content: this.state.content + i })
+  }
 
   renderCell(i, width) {
     return (
       <Grid.Column 
       width={width}
       className='cell' 
-      onClick={ () => this.setState({content: this.state.content + i }) }
+      onClick={ () => this.handleCellClick(i) }
       >
       {i}
       </Grid.Column>
     );
   }
 
-  renderOperator(i) {
+  handleOperatorClick(i) {
     let x = this.state
+    this.setState({
+      number: x.content,
+      placeholder: x.content, 
+      content: '',
+      operator: {i},
+      equalsTriggered: 0,
+      backupContent: null }) 
+  }
+
+  renderOperator(i) {
     return (
       <Grid.Column 
       className='operator' 
-      onClick={ () => {
-          this.setState({
-            number: x.content,
-            placeholder: x.content, 
-            content: '',
-            operator: {i},
-            equalsTriggered: 0,
-            backupContent: null }) 
-        } // function end
+      onClick={ () => { this.handleOperatorClick(i) } 
       }> 
       {i}
       </Grid.Column>
     );
   }
+
+  handleCommandClick(i) { 
+    let x = this.state
+    let result = ""
+    if (i === "+/-") {
+      result = x.content * -1
+    } else if (i === "%") {
+      result = x.content / 100
+    } 
+      this.setState({
+        number: result,
+        placeholder: result,
+        content: result,
+        operator: '',
+        equalsTriggered: 0,
+        backupContent: null }) 
+    }
 
   renderCommand(i,width) {
     return (
       <Grid.Column
       width={width}
       className='command' 
-      onClick={ () => {
-        let x = this.state
-        let result = ""
-
-        if (i === "+/-") {
-          result = x.content * -1
-        } else if (i === "%") {
-          result = x.content / 100
-        } else {
-          console.log("renderCommand could not match value of i, which is " + i)
-        }
-
-          this.setState({
-            number: result,
-            placeholder: result,
-            content: result,
-            operator: '',
-            equalsTriggered: 0,
-            backupContent: null }) 
-        } // function end
-      }> 
+      onClick={ () => {this.handleCommandClick(i)}}> 
       {i}
       </Grid.Column>
     );
   }
 
-  renderEquals(i) {
+  handleEqualsClick(i) {
     let x = this.state
     let result = ""
     let operator = x.operator.i
     let number = x.number
     let content = x.content
     let backupContent = x.backupContent
+    if (x.equalsTriggered === 0) {
+      backupContent = content
+     // if equals has been pushed only ONCE before, then backupcontent state is set to last content , else content is use backedContent.
+    } else if (x.equalsTriggered >= 1) {
+      content = backupContent
+    }
+    if (operator === "-") {
+      result = number - content
+    } else if (operator === "+") {
+      result = (parseFloat(number) + parseFloat(content))
+    } else if (operator === "/") {
+      result = number / content
+    } else if (operator === "x") {
+      result = number * content
+    } else {
+      result = x.content
+    }
+    result = result.toString();
+    this.setState({
+      content: result,
+      number: result,
+      placeholder: "",
+      equalsTriggered: (x.equalsTriggered + 1),
+      backupContent: backupContent
+    })
+  }
+
+  renderEquals(i) {
     return (
       <Grid.Column 
       className='equals' 
-      onClick={ () => {
-
-        if (x.equalsTriggered === 0) {
-          backupContent = content
-         // if equals has been pushed only ONCE before, then backupcontent state is set to last content , else content is use backedContent.
-        } else if (x.equalsTriggered >= 1) {
-          content = backupContent
-        }
-
-        if (operator === "-") {
-          result = number - content
-        } else if (operator === "+") {
-          result = (parseFloat(number) + parseFloat(content))
-        } else if (operator === "/") {
-          result = number / content
-        } else if (operator === "x") {
-          result = number * content
-        } else {
-          result = x.content
-        }
-
-        result = result.toString();
-
-        // result = result.toString();
-        // console.log("result has value of " + result + " and is a '" + typeof result + "'");        
-
-        this.setState({
-          content: result,
-          number: result,
-          placeholder: "",
-          equalsTriggered: (x.equalsTriggered + 1),
-          backupContent: backupContent
-        })
-           
-        } // function end
+      onClick={ () => { this.handleEqualsClick(i) } // function end
       }> 
       =
       </Grid.Column>
@@ -142,6 +166,13 @@ class Calculator extends Component {
     );
   }
 
+  componentDidMount() {
+   window.addEventListener('keypress', (event) => {this.updateInput(event.key)} ) 
+  } // did mount end
+
+  componentWillUnmount() {
+    window.addEventListener('keypress', (event) => {this.updateInput(event.key)} )
+  }
 
   render() {
     return(
