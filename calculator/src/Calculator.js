@@ -2,21 +2,11 @@ import React, { Component } from 'react';
 import './index.css';
 import { Input, Container, Grid } from 'semantic-ui-react';
 
-
-function Cell(props) {
-  return(
-    <Grid.Column className='cell' onClick={ () => {console.log(props.value)} }>
-      {props.value}
-    </Grid.Column>
-  );
-}
-
 class Calculator extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      answer: null,
-      content: "0",
+      content: "",
       number: null,
       placeholder: "", 
       operator: null
@@ -54,25 +44,47 @@ class Calculator extends Component {
     );
   }
 
-  renderEquals(i) {
+  renderCommand(i) {
     let x = this.state
-    let result = 0
     return (
       <Grid.Column 
-      className='operator' 
+      className='command' 
+      onClick={ () => {
+          this.setState({
+            number: "",
+            placeholder: "", 
+            content: '',
+            operator: null }) 
+        } // function end
+      }> 
+      {i}
+      </Grid.Column>
+    );
+  }
+
+  renderEquals(i) {
+    let x = this.state
+    let result = ""
+    return (
+      <Grid.Column 
+      className='equals' 
       onClick={ () => {
         if (x.operator.i === "-") {
           result = x.number - x.content
         } else if (x.operator.i === "+") {
-          result = x.number + x.content
+          result = (parseFloat(x.number) + parseFloat(x.content))
         } else if (x.operator.i === "%") {
           result = x.number / x.content
+        } else if (x.operator.i === "*") {
+          result = x.number * x.content
         } else {
           result = "there was no match in the if block"
         }
 
+        result = result.toString();
+        console.log("result has value of " + result + " and is a '" + typeof result + "'");        
+
         this.setState({
-          answer: result,
           content: result,
           number: result,
           placeholder: ''
@@ -83,7 +95,7 @@ class Calculator extends Component {
       =
       </Grid.Column>
     );
-  }
+  } // renderEquals end. 
 
   renderInputBar() {
     return(
@@ -103,24 +115,32 @@ class Calculator extends Component {
         {this.renderInputBar()}
         <Grid columns={4} celled>
           <Grid.Row>
+            {this.renderCommand("AC")}
+            {this.renderCommand("AC")}
+            {this.renderCommand("AC")}
+            {this.renderOperator("*")}
+          </Grid.Row>
+          <Grid.Row>
             {this.renderCell(1)}
             {this.renderCell(2)}
             {this.renderCell(3)}
-            {this.renderOperator("-")}
+            {this.renderOperator("%")}
           </Grid.Row>
           <Grid.Row>
             {this.renderCell(4)}
             {this.renderCell(5)}
             {this.renderCell(6)}
-            {this.renderOperator("%")}
+            {this.renderOperator("+")}
           </Grid.Row>
           <Grid.Row>
             {this.renderCell(7)}
             {this.renderCell(8)}
             {this.renderCell(9)}
-            {this.renderOperator("+")}
+            {this.renderOperator("-")}
           </Grid.Row>
           <Grid.Row>
+            {this.renderCell(0)}
+            {this.renderCell(".")}
             {this.renderEquals()}
           </Grid.Row>
         </Grid>
