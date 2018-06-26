@@ -15,9 +15,10 @@ class Calculator extends Component {
 
   // this.addEventListener('keypress', (event)=> { this.setState({ content: this.state.content + event.target.value }) });
 
-  renderCell(i) {
+  renderCell(i, width) {
     return (
       <Grid.Column 
+      width={2}
       className='cell' 
       onClick={ () => this.setState({content: this.state.content + i }) }
       >
@@ -45,7 +46,6 @@ class Calculator extends Component {
   }
 
   renderCommand(i) {
-    let x = this.state
     return (
       <Grid.Column 
       className='command' 
@@ -121,9 +121,9 @@ class Calculator extends Component {
             {this.renderOperator("*")}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(1)}
-            {this.renderCell(2)}
-            {this.renderCell(3)}
+            {this.renderCell(7)}
+            {this.renderCell(8)}
+            {this.renderCell(9)}
             {this.renderOperator("%")}
           </Grid.Row>
           <Grid.Row>
@@ -133,13 +133,13 @@ class Calculator extends Component {
             {this.renderOperator("+")}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(7)}
-            {this.renderCell(8)}
-            {this.renderCell(9)}
+            {this.renderCell(1)}
+            {this.renderCell(2)}
+            {this.renderCell(3)}
             {this.renderOperator("-")}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(0)}
+            {this.renderCell(0,)}
             {this.renderCell(".")}
             {this.renderEquals()}
           </Grid.Row>
