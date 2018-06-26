@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import './index.css';
 import { Input, Container, Grid } from 'semantic-ui-react';
+import './index.css';
 
 class Calculator extends Component {
   constructor(props) {
@@ -9,7 +9,9 @@ class Calculator extends Component {
       content: "",
       number: null,
       placeholder: "", 
-      operator: null
+      operator: '',
+      equalsTriggered: 0,
+      backupContent: null
     }
   }
 
@@ -18,7 +20,7 @@ class Calculator extends Component {
   renderCell(i, width) {
     return (
       <Grid.Column 
-      width={2}
+      width={width}
       className='cell' 
       onClick={ () => this.setState({content: this.state.content + i }) }
       >
@@ -37,7 +39,9 @@ class Calculator extends Component {
             number: x.content,
             placeholder: x.content, 
             content: '',
-            operator: {i} }) 
+            operator: {i},
+            equalsTriggered: 0,
+            backupContent: null }) 
         } // function end
       }> 
       {i}
@@ -45,16 +49,30 @@ class Calculator extends Component {
     );
   }
 
-  renderCommand(i) {
+  renderCommand(i,width) {
     return (
-      <Grid.Column 
+      <Grid.Column
+      width={width}
       className='command' 
       onClick={ () => {
+        let x = this.state
+        let result = ""
+
+        if (i === "+/-") {
+          result = x.content * -1
+        } else if (i === "%") {
+          result = x.content / 100
+        } else {
+          console.log("renderCommand could not match value of i, which is " + i)
+        }
+
           this.setState({
-            number: "",
-            placeholder: "", 
-            content: '',
-            operator: null }) 
+            number: result,
+            placeholder: result,
+            content: result,
+            operator: '',
+            equalsTriggered: 0,
+            backupContent: null }) 
         } // function end
       }> 
       {i}
@@ -65,29 +83,45 @@ class Calculator extends Component {
   renderEquals(i) {
     let x = this.state
     let result = ""
+    let operator = x.operator.i
+    let number = x.number
+    let content = x.content
+    let backupContent = x.backupContent
     return (
       <Grid.Column 
       className='equals' 
       onClick={ () => {
-        if (x.operator.i === "-") {
-          result = x.number - x.content
-        } else if (x.operator.i === "+") {
-          result = (parseFloat(x.number) + parseFloat(x.content))
-        } else if (x.operator.i === "%") {
-          result = x.number / x.content
-        } else if (x.operator.i === "*") {
-          result = x.number * x.content
+
+        if (x.equalsTriggered === 0) {
+          backupContent = content
+         // if equals has been pushed only ONCE before, then backupcontent state is set to last content , else content is use backedContent.
+        } else if (x.equalsTriggered >= 1) {
+          content = backupContent
+        }
+
+        if (operator === "-") {
+          result = number - content
+        } else if (operator === "+") {
+          result = (parseFloat(number) + parseFloat(content))
+        } else if (operator === "/") {
+          result = number / content
+        } else if (operator === "x") {
+          result = number * content
         } else {
-          result = "there was no match in the if block"
+          result = x.content
         }
 
         result = result.toString();
-        console.log("result has value of " + result + " and is a '" + typeof result + "'");        
+
+        // result = result.toString();
+        // console.log("result has value of " + result + " and is a '" + typeof result + "'");        
 
         this.setState({
           content: result,
           number: result,
-          placeholder: ''
+          placeholder: "",
+          equalsTriggered: (x.equalsTriggered + 1),
+          backupContent: backupContent
         })
            
         } // function end
@@ -111,40 +145,44 @@ class Calculator extends Component {
 
   render() {
     return(
-      <Container text className="container">
+      <Container className="container">
         {this.renderInputBar()}
-        <Grid columns={4} celled>
+        <Grid 
+        columns={4} 
+        celled 
+        textAlign='center' 
+        className="all-buttons">
           <Grid.Row>
-            {this.renderCommand("AC")}
-            {this.renderCommand("AC")}
-            {this.renderCommand("AC")}
-            {this.renderOperator("*")}
+            {this.renderCommand("AC", 4)}
+            {this.renderCommand("+/-", 4)}
+            {this.renderCommand("%", 4)}
+            {this.renderOperator("x", 4)}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(7)}
-            {this.renderCell(8)}
-            {this.renderCell(9)}
-            {this.renderOperator("%")}
+            {this.renderCell(7, 4)}
+            {this.renderCell(8, 4)}
+            {this.renderCell(9, 4)}
+            {this.renderOperator("/", 4)}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(4)}
-            {this.renderCell(5)}
-            {this.renderCell(6)}
-            {this.renderOperator("+")}
+            {this.renderCell(4, 4)}
+            {this.renderCell(5, 4)}
+            {this.renderCell(6, 4)}
+            {this.renderOperator("+", 4)}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(1)}
-            {this.renderCell(2)}
-            {this.renderCell(3)}
-            {this.renderOperator("-")}
+            {this.renderCell(1, 4)}
+            {this.renderCell(2, 4)}
+            {this.renderCell(3, 4)}
+            {this.renderOperator("-", 4)}
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(0,)}
-            {this.renderCell(".")}
+            {this.renderCell(0, 8)}
+            {this.renderCell(".", 4)}
             {this.renderEquals()}
           </Grid.Row>
         </Grid>
-      </Container>
+      </Container> 
     );
   }
 }
