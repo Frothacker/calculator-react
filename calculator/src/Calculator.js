@@ -70,7 +70,7 @@ class Calculator extends Component {
         pressStyle: i  }) 
     }
 
-  handleEqualsClick() {
+  handleEqualsClick(i, width) {
     let x = this.state
     let result 
     let operator = x.operator
@@ -224,7 +224,6 @@ function Cell(props) {
   if ( props.i === props.style ) {
     cellStyle = {backgroundColor: "#E1E1E1"}
   }
-
   return (
     <Grid.Column 
     width={ props.width }
