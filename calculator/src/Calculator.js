@@ -51,7 +51,7 @@ class Calculator extends Component {
   }
 
   handleCellClick(i) {
-    this.setState({content: this.state.content + i })
+    this.setState({ content: this.state.content + i })
   }
 
   renderCell(i, width) {
