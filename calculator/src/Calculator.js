@@ -19,19 +19,26 @@ class Calculator extends Component {
     let x = this.state
     let content = x.content 
     let operators = ['-','/','*','+'] 
-    if ( parseInt(key) ) {
+    
+    if ( parseInt(key) || key === "0") {
       console.log("handleCellClick for " + key)
       this.handleCellClick(key)
+
     } else if ( operators.includes(key) ) {
       console.log("handleOperatorClick for" +key)
       this.handleOperatorClick(key)
+
     } else if ( key === "Enter" || key === "=" ) {
       console.log("rendering equals")
       this.handleEqualsClick(key)
-    } else if ( key === "Delete") { // cant yet get the "delete" key triggering from eventlistener
+
+    } else if ( key === "Backspace") { // cant yet get the "delete" key triggering from eventlistener
       console.log("rendering delete command")
       this.handleDeleteClick(key)
-    }else {
+    } else if ( key === "c") { // cant yet get the "delete" key triggering from eventlistener
+      console.log("rendering AC command")
+      this.handleCommandClick("AC")
+    } else {
       console.log( key +" is not an operator or a number")
     }
   }
@@ -39,8 +46,7 @@ class Calculator extends Component {
 // needs work. does pop() work on a string?
   handleDeleteClick(i) {
     let content = this.state.content
-    content = content.pop()
-    console.log(content)
+    content = content.slice(0,-1)
     this.setState({ content: content })
   }
 
@@ -158,20 +164,22 @@ class Calculator extends Component {
   renderInputBar() {
     return(
       <Input 
+      fluid
+      // disabled
+      className="input-bar"
       placeholder={this.state.placeholder}
       value={this.state.content}
-      fluid 
       onChange={(event) => this.setState({ content: event.target.value })}
       />
     );
   }
 
   componentDidMount() {
-   window.addEventListener('keypress', (event) => {this.updateInput(event.key)} ) 
+   window.addEventListener('keydown', (event) => {this.updateInput(event.key)} ) 
   } // did mount end
 
   componentWillUnmount() {
-    window.addEventListener('keypress', (event) => {this.updateInput(event.key)} )
+    window.addEventListener('keydown', (event) => {this.updateInput(event.key)} )
   }
 
   render() {

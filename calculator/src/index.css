@@ -15,6 +15,6 @@
   background-color: #FCFCFC;
 }
 
-.input {
-  color: #E1E1E1;
+.ui.input>input {
+  pointer-events: none;
 }
