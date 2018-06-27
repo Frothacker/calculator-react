@@ -11,39 +11,29 @@ class Calculator extends Component {
       placeholder: "", 
       operator: '',
       equalsTriggered: 0,
-      backupContent: null
+      backupContent: null,
+      pressStyle: ''
     }
   }
 
   updateInput(key) {
-    let x = this.state
-    let content = x.content 
     let operators = ['-','/','*','+'] 
     
-    if ( parseInt(key) || key === "0") {
-      console.log("handleCellClick for " + key)
-      this.handleCellClick(key)
-
+    if ( parseInt(key) || key === "0") {  // if key is a number, handle click as integar. 
+      this.handleCellClick(parseInt(key)) 
     } else if ( operators.includes(key) ) {
-      console.log("handleOperatorClick for" +key)
       this.handleOperatorClick(key)
-
     } else if ( key === "Enter" || key === "=" ) {
-      console.log("rendering equals")
       this.handleEqualsClick(key)
-
-    } else if ( key === "Backspace") { // cant yet get the "delete" key triggering from eventlistener
-      console.log("rendering delete command")
+    } else if ( key === "Backspace") { 
       this.handleDeleteClick(key)
-    } else if ( key === "c") { // cant yet get the "delete" key triggering from eventlistener
-      console.log("rendering AC command")
+    } else if ( key === "c") { 
       this.handleCommandClick("AC")
     } else {
       console.log( key +" is not an operator or a number")
     }
   }
 
-// needs work. does pop() work on a string?
   handleDeleteClick(i) {
     let content = this.state.content
     content = content.slice(0,-1)
@@ -51,16 +41,23 @@ class Calculator extends Component {
   }
 
   handleCellClick(i) {
-    this.setState({ content: this.state.content + i })
-  }
+    this.setState({ 
+      content: this.state.content + i,
+      pressStyle: i })
+    }
 
   renderCell(i, width) {
+    let cellStyle = {backgroundColor: "#FCFCFC"}
+    if ( i === this.state.pressStyle) {
+      cellStyle = {backgroundColor: "#E1E1E1"}
+    }
+
     return (
       <Grid.Column 
       width={width}
-      className='cell' 
-      onClick={ () => this.handleCellClick(i) }
-      >
+      style={ cellStyle }
+      onMouseDown={ () => { this.handleCellClick(i) } 
+      }>
       {i}
       </Grid.Column>
     );
@@ -72,16 +69,21 @@ class Calculator extends Component {
       number: x.content,
       placeholder: x.content, 
       content: '',
-      operator: {i},
+      operator: i,
       equalsTriggered: 0,
-      backupContent: null }) 
+      backupContent: null,
+      pressStyle: i }) 
   }
 
   renderOperator(i) {
+    let operatorStyle = { backgroundColor: "#FFA500" }
+    if (i === this.state.pressStyle) {
+      operatorStyle = { backgroundColor: "#D88C00"}
+    }
     return (
       <Grid.Column 
-      className='operator' 
-      onClick={ () => { this.handleOperatorClick(i) } 
+      style={ operatorStyle } 
+      onMouseDown={ () => {this.handleOperatorClick(i)} 
       }> 
       {i}
       </Grid.Column>
@@ -102,24 +104,30 @@ class Calculator extends Component {
         content: result,
         operator: '',
         equalsTriggered: 0,
-        backupContent: null }) 
+        backupContent: null,
+        pressStyle: i  }) 
     }
 
   renderCommand(i,width) {
+    let commandStyle = { backgroundColor: "#E1E1E1" }
+    if (i === this.state.pressStyle) {
+      commandStyle = { backgroundColor: "#D1D1D1"}
+    }
     return (
       <Grid.Column
       width={width}
-      className='command' 
-      onClick={ () => {this.handleCommandClick(i)}}> 
+      style={ commandStyle } 
+      onMouseDown={ () => {this.handleCommandClick(i)}
+      }> 
       {i}
       </Grid.Column>
     );
   }
 
-  handleEqualsClick(i) {
+  handleEqualsClick() {
     let x = this.state
-    let result = ""
-    let operator = x.operator.i
+    let result 
+    let operator = x.operator
     let number = x.number
     let content = x.content
     let backupContent = x.backupContent
@@ -146,15 +154,21 @@ class Calculator extends Component {
       number: result,
       placeholder: "",
       equalsTriggered: (x.equalsTriggered + 1),
-      backupContent: backupContent
+      backupContent: backupContent,
+      pressStyle: "="
+
     })
   }
 
-  renderEquals(i) {
+  renderEquals() {
+    let equalsStyle = { backgroundColor: "#FFA500" }
+    if ("=" === this.state.pressStyle) {
+      equalsStyle = { backgroundColor: "#D88C00"}
+    }
     return (
       <Grid.Column 
-      className='equals' 
-      onClick={ () => { this.handleEqualsClick(i) } // function end
+      style={ equalsStyle } 
+      onMouseDown={ () => {this.handleEqualsClick()} // function end
       }> 
       =
       </Grid.Column>
@@ -165,7 +179,6 @@ class Calculator extends Component {
     return(
       <Input 
       fluid
-      // disabled
       className="input-bar"
       placeholder={this.state.placeholder}
       value={this.state.content}
@@ -175,11 +188,16 @@ class Calculator extends Component {
   }
 
   componentDidMount() {
-   window.addEventListener('keydown', (event) => {this.updateInput(event.key)} ) 
-  } // did mount end
+   window.addEventListener('keydown', (event) => this.updateInput(event.key) )
+   window.addEventListener('keyup', (event) => this.setState({ pressStyle: '' }) )
+   window.addEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
+  } 
 
   componentWillUnmount() {
-    window.addEventListener('keydown', (event) => {this.updateInput(event.key)} )
+    window.removeEventListener('keydown', (event) => this.updateInput(event.key) )
+    window.removeEventListener('keyup', (event) => this.setState({ pressStyle: '' }) )
+    window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
+
   }
 
   render() {

@@ -7,14 +7,6 @@
   border-color: #E1E1E1;
 }
 
-.equals, .operator {
-  background-color: orange;
-}
-
-.cell {
-  background-color: #FCFCFC;
-}
-
 .ui.input>input {
   pointer-events: none;
 }
