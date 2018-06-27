@@ -40,29 +40,6 @@ class Calculator extends Component {
     this.setState({ content: content })
   }
 
-  handleCellClick(i) {
-    this.setState({ 
-      content: this.state.content + i,
-      pressStyle: i })
-    }
-
-  renderCell(i, width) {
-    let cellStyle = {backgroundColor: "#FCFCFC"}
-    if ( i === this.state.pressStyle) {
-      cellStyle = {backgroundColor: "#E1E1E1"}
-    }
-
-    return (
-      <Grid.Column 
-      width={width}
-      style={ cellStyle }
-      onMouseDown={ () => { this.handleCellClick(i) } 
-      }>
-      {i}
-      </Grid.Column>
-    );
-  }
-
   handleOperatorClick(i) {
     let x = this.state
     this.setState({
@@ -73,21 +50,6 @@ class Calculator extends Component {
       equalsTriggered: 0,
       backupContent: null,
       pressStyle: i }) 
-  }
-
-  renderOperator(i) {
-    let operatorStyle = { backgroundColor: "#FFA500" }
-    if (i === this.state.pressStyle) {
-      operatorStyle = { backgroundColor: "#D88C00"}
-    }
-    return (
-      <Grid.Column 
-      style={ operatorStyle } 
-      onMouseDown={ () => {this.handleOperatorClick(i)} 
-      }> 
-      {i}
-      </Grid.Column>
-    );
   }
 
   handleCommandClick(i) { 
@@ -107,22 +69,6 @@ class Calculator extends Component {
         backupContent: null,
         pressStyle: i  }) 
     }
-
-  renderCommand(i,width) {
-    let commandStyle = { backgroundColor: "#E1E1E1" }
-    if (i === this.state.pressStyle) {
-      commandStyle = { backgroundColor: "#D1D1D1"}
-    }
-    return (
-      <Grid.Column
-      width={width}
-      style={ commandStyle } 
-      onMouseDown={ () => {this.handleCommandClick(i)}
-      }> 
-      {i}
-      </Grid.Column>
-    );
-  }
 
   handleEqualsClick() {
     let x = this.state
@@ -160,32 +106,11 @@ class Calculator extends Component {
     })
   }
 
-  renderEquals() {
-    let equalsStyle = { backgroundColor: "#FFA500" }
-    if ("=" === this.state.pressStyle) {
-      equalsStyle = { backgroundColor: "#D88C00"}
+  handleCellClick(i) {
+    this.setState({ 
+      content: this.state.content + i,
+      pressStyle: i })
     }
-    return (
-      <Grid.Column 
-      style={ equalsStyle } 
-      onMouseDown={ () => {this.handleEqualsClick()} // function end
-      }> 
-      =
-      </Grid.Column>
-    );
-  } // renderEquals end. 
-
-  renderInputBar() {
-    return(
-      <Input 
-      fluid
-      className="input-bar"
-      placeholder={this.state.placeholder}
-      value={this.state.content}
-      onChange={(event) => this.setState({ content: event.target.value })}
-      />
-    );
-  }
 
   componentDidMount() {
    window.addEventListener('keydown', (event) => this.updateInput(event.key) )
@@ -201,42 +126,48 @@ class Calculator extends Component {
   }
 
   render() {
+    let style = this.state.pressStyle
+
     return(
       <Container className="container">
-        {this.renderInputBar()}
+        <InputBar 
+          placeholder={this.state.placeholder}
+          value={this.state.content} 
+          onChange={(event) => this.setState({ content: event.target.value })}
+        />
         <Grid 
         columns={4} 
         celled 
         textAlign='center' 
         className="all-buttons">
           <Grid.Row>
-            {this.renderCommand("AC", 4)}
-            {this.renderCommand("+/-", 4)}
-            {this.renderCommand("%", 4)}
-            {this.renderOperator("x", 4)}
+            <Command style={style} i="AC" width={4} onClick={ () => this.handleCommandClick("AC")} />
+            <Command style={style} i="+/-" width={4} onClick={ () => this.handleCommandClick("+/-")} />
+            <Command style={style} i="%" width={4} onClick={ () => this.handleCommandClick("%")} />
+            <Operator i="x" width={4} onClick={ () => this.handleOperatorClick("x") } style={style}/>
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(7, 4)}
-            {this.renderCell(8, 4)}
-            {this.renderCell(9, 4)}
-            {this.renderOperator("/", 4)}
+            <Cell i={7} width={4} onClick={ () => this.handleCellClick(7) } style={style}/>
+            <Cell i={8} width={4} onClick={ () => this.handleCellClick(8) } style={style}/>
+            <Cell i={9} width={4} onClick={ () => this.handleCellClick(9) } style={style}/>
+            <Operator i="/" width={4} onClick={ () => this.handleOperatorClick("/") } style={style}/>
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(4, 4)}
-            {this.renderCell(5, 4)}
-            {this.renderCell(6, 4)}
-            {this.renderOperator("+", 4)}
+            <Cell i={4} width={4} onClick={ () => this.handleCellClick(4) } style={style}/>
+            <Cell i={5} width={4} onClick={ () => this.handleCellClick(5) } style={style}/>
+            <Cell i={6} width={4} onClick={ () => this.handleCellClick(6) } style={style}/>
+            <Operator i="+" width={4} onClick={ () => this.handleOperatorClick("+") } style={style}/>
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(1, 4)}
-            {this.renderCell(2, 4)}
-            {this.renderCell(3, 4)}
-            {this.renderOperator("-", 4)}
+            <Cell i={1} width={4} onClick={ () => this.handleCellClick(1) } style={style}/>
+            <Cell i={2} width={4} onClick={ () => this.handleCellClick(2) } style={style}/>
+            <Cell i={3} width={4} onClick={ () => this.handleCellClick(3) } style={style}/>
+            <Operator i="-" width={4} onClick={ () => this.handleOperatorClick("-") } style={style}/>
           </Grid.Row>
           <Grid.Row>
-            {this.renderCell(0, 8)}
-            {this.renderCell(".", 4)}
-            {this.renderEquals()}
+            <Cell i={0} width={8} onClick={ () => this.handleCellClick(0) } style={style}/>
+            <Cell i={"."} width={4} onClick={ () => this.handleCellClick(".") } style={style}/>
+            <Equals style={style} onClick={ () => this.handleEqualsClick() }/>
           </Grid.Row>
         </Grid>
       </Container> 
@@ -244,5 +175,77 @@ class Calculator extends Component {
   }
 }
 
+function Operator(props) {
+    let operatorStyle = { backgroundColor: "#FFA500" }
+    if (props.i === props.style) {
+      operatorStyle = { backgroundColor: "#D88C00"}
+    }
+    return (
+      <Grid.Column 
+      style={ operatorStyle } 
+      onMouseDown={ props.onClick }> 
+      {props.i}
+      </Grid.Column>
+    );
+  }
+
+function Command(props) {
+  let commandStyle = { backgroundColor: "#E1E1E1" }
+  if (props.i === props.style) {
+    commandStyle = { backgroundColor: "#D1D1D1"}
+  }
+  return (
+    <Grid.Column
+    width={ props.width }
+    style={ commandStyle } 
+    onMouseDown={ props.onClick }> 
+    {props.i}
+    </Grid.Column>
+  );
+}
+
+function Equals(props) {
+  let equalsStyle = { backgroundColor: "#FFA500" }
+  if ("=" === props.style) {
+    equalsStyle = { backgroundColor: "#D88C00"}
+  }
+  return (
+    <Grid.Column 
+    style={ equalsStyle } 
+    onMouseDown={props.onClick}> 
+    =
+    </Grid.Column>
+  );
+} // renderEquals end. 
+
+
+function Cell(props) {
+  let cellStyle = {backgroundColor: "#FCFCFC"}
+  if ( props.i === props.style ) {
+    cellStyle = {backgroundColor: "#E1E1E1"}
+  }
+
+  return (
+    <Grid.Column 
+    width={ props.width }
+    style={ cellStyle }
+    onMouseDown={ props.onClick } 
+    >
+    {props.i}
+    </Grid.Column>
+  );
+}
+
+function InputBar(props) {
+  return(
+    <Input 
+    fluid
+    className="input-bar"
+    placeholder={props.placeholder}
+    value={props.value}
+    onChange={props.onChange}
+    />
+  );
+}
 
 export default Calculator;

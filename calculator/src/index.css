@@ -2,10 +2,6 @@
   margin-top: 20px;
   width: 100px;
 }
-.command {
-  background-color: #E1E1E1;
-  border-color: #E1E1E1;
-}
 
 .ui.input>input {
   pointer-events: none;
