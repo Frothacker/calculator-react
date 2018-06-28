@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import { Input, Container, Grid, Segment, Footer } from 'semantic-ui-react';
-import './index.css';
+import React, { Component } from 'react'
+import { Container, Grid } from 'semantic-ui-react'
+import './index.css'
 
-import Cell from "./buttons/Cell";
-import Operator from "./buttons/Operator";
-import Command from "./buttons/Command";
-import Equals from "./buttons/Equals";
-import InputBar from "./InputBar";
-import Info from "./Info";
+import Cell from "./buttons/Cell"
+import Operator from "./buttons/Operator"
+import Command from "./buttons/Command"
+import Equals from "./buttons/Equals"
+import InputBar from "./InputBar"
+import Info from "./Info"
 
 class Calculator extends Component {
   constructor(props) {
@@ -26,8 +26,8 @@ class Calculator extends Component {
   updateInput(key) {
     let operators = ['-','/','x','+'] 
     
-    if ( parseInt(key) || key === "0") {  // if key is a number, handle click as integar. 
-      this.handleCellClick(parseInt(key)) 
+    if ( parseInt(key, 10) || key === "0") {  // if key is a number, handle click as integar. 
+      this.handleCellClick(parseInt(key, 10)) 
     } else if ( operators.includes(key) ) { // handles case of other operators key input
       this.handleOperatorClick(key)
     } else if ( key === "%" ) { // handles case of "%" key input
@@ -138,8 +138,59 @@ class Calculator extends Component {
     window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
   }
 
+  renderRow ({ numbers, operator, width}) {
+    const style = this.state.pressStyle
+    return ( 
+      <Grid.Row key={numbers}>
+        {
+          numbers.map( num => {
+            return <Cell key={num} i={num} width={width} onClick={ () => this.handleCellClick(num) } style={style}/>
+          })
+        }
+        <Operator key={operator} i={operator} width={width} onClick={ () => this.handleOperatorClick(operator) } style={style}/>
+      </Grid.Row>
+    )
+  }
+
+  renderCommandRow ({ commands, operator, width}) {
+    const style = this.state.pressStyle
+    return (
+      <Grid.Row>
+        {
+          commands.map( num => {
+            return <Command key={num} i={num} width={width} onClick={ () => this.handleCommandClick(num) } style={style}/>
+          })
+        }
+        <Operator key={operator} i={operator} width={width} onClick={ () => this.handleOperatorClick(operator) } style={style}/>
+      </Grid.Row>
+    )
+  }
+
+  renderMain({cellNameAndWidth}) {
+    return(
+      cellNameAndWidth.map( info => {  
+        const [nums, operator] = info
+        return this.renderRow({numbers: nums, operator: operator, width: 4})
+      })
+    )
+  }
+
+  renderBottomRow({cellNameAndWidth, equalsWidth}) {    
+    const style = this.state.pressStyle 
+    return(
+        <Grid.Row>
+          {              
+            cellNameAndWidth.map( info => {
+              const [nums,width] = info
+              return <Cell key={nums} i={nums} width={width} onClick={ () => this.handleCellClick(nums) } style={style}/>
+            })
+          }
+          <Equals key="equals" style={style} width={equalsWidth} onClick={ () => this.handleEqualsClick() }/>
+        </Grid.Row>
+    )
+  }
+  
   render() {
-    let style = this.state.pressStyle
     return(
       <Container className="container">
         <InputBar 
@@ -152,35 +203,9 @@ class Calculator extends Component {
         celled 
         textAlign='center' 
         className="all-buttons">
-          <Grid.Row>
-            <Command style={style} i="AC" width={4} onClick={ () => this.handleCommandClick("AC")} />
-            <Command style={style} i="+/-" width={4} onClick={ () => this.handleCommandClick("+/-")} />
-            <Command style={style} i="%" width={4} onClick={ () => this.handleCommandClick("%")} />
-            <Operator i="x" width={4} onClick={ () => this.handleOperatorClick("x") } style={style}/>
-          </Grid.Row>
-          <Grid.Row>
-            <Cell i={7} width={4} onClick={ () => this.handleCellClick(7) } style={style}/>
-            <Cell i={8} width={4} onClick={ () => this.handleCellClick(8) } style={style}/>
-            <Cell i={9} width={4} onClick={ () => this.handleCellClick(9) } style={style}/>
-            <Operator i="/" width={4} onClick={ () => this.handleOperatorClick("/") } style={style}/>
-          </Grid.Row>
-          <Grid.Row>
-            <Cell i={4} width={4} onClick={ () => this.handleCellClick(4) } style={style}/>
-            <Cell i={5} width={4} onClick={ () => this.handleCellClick(5) } style={style}/>
-            <Cell i={6} width={4} onClick={ () => this.handleCellClick(6) } style={style}/>
-            <Operator i="+" width={4} onClick={ () => this.handleOperatorClick("+") } style={style}/>
-          </Grid.Row>
-          <Grid.Row>
-            <Cell i={1} width={4} onClick={ () => this.handleCellClick(1) } style={style}/>
-            <Cell i={2} width={4} onClick={ () => this.handleCellClick(2) } style={style}/>
-            <Cell i={3} width={4} onClick={ () => this.handleCellClick(3) } style={style}/>
-            <Operator i="-" width={4} onClick={ () => this.handleOperatorClick("-") } style={style}/>
-          </Grid.Row>
-          <Grid.Row>
-            <Cell i={0} width={8} onClick={ () => this.handleCellClick(0) } style={style}/>
-            <Cell i={"."} width={4} onClick={ () => this.handleCellClick(".") } style={style}/>
-            <Equals style={style} onClick={ () => this.handleEqualsClick() }/>
-          </Grid.Row>
+          {this.renderCommandRow({commands: ["AC","+/-","%"], operator: 'x', width: 4})}
+          {this.renderMain({ cellNameAndWidth: [ [[7,8,9],'/'], [[4,5,6],'+'], [[1,2,3],'-']] }) }
+          {this.renderBottomRow({cellNameAndWidth: [ [0,8], [".",4] ] , equalsWidth: 4 }) }
         </Grid>
         <Info />
       </Container> 
