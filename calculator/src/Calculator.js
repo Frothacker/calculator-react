@@ -2,98 +2,12 @@ import React, { Component } from 'react';
 import { Input, Container, Grid, Segment, Footer } from 'semantic-ui-react';
 import './index.css';
 
-function Operator(props) {
-    let operatorStyle = { backgroundColor: "#FFA500" }
-    if (props.i === props.style) {
-      operatorStyle = { backgroundColor: "#D88C00"}
-    }
-    return (
-      <Grid.Column 
-      style={ operatorStyle } 
-      onMouseDown={ props.onClick }> 
-      {props.i}
-      </Grid.Column>
-    );
-  }
-
-function Command(props) {
-  let commandStyle = { backgroundColor: "#E1E1E1" }
-  if (props.i === props.style) {
-    commandStyle = { backgroundColor: "#D1D1D1"}
-  }
-  return (
-    <Grid.Column
-    width={ props.width }
-    style={ commandStyle } 
-    onMouseDown={ props.onClick }> 
-    {props.i}
-    </Grid.Column>
-  );
-}
-
-function Equals(props) {
-  let equalsStyle = { backgroundColor: "#FFA500" }
-  if ("=" === props.style) {
-    equalsStyle = { backgroundColor: "#D88C00"}
-  }
-  return (
-    <Grid.Column 
-    style={ equalsStyle } 
-    onMouseDown={props.onClick}> 
-    =
-    </Grid.Column>
-  );
-} 
-
-function Cell(props) {
-  let cellStyle = {backgroundColor: "#FCFCFC"}
-  if ( props.i === props.style ) {
-    cellStyle = {backgroundColor: "#E1E1E1"}
-  }
-  return (
-    <Grid.Column 
-    width={ props.width }
-    style={ cellStyle }
-    onMouseDown={ props.onClick } 
-    >
-    {props.i}
-    </Grid.Column>
-  );
-}
-
-function InputBar(props) {
-  return(
-    <Input 
-    fluid
-    className="input-bar"
-    placeholder={props.placeholder}
-    value={props.value}
-    onChange={props.onChange}
-    />
-  );
-}
-
-function Foot() {
-  return(
-    <Segment className="footer">
-      Made by Finn
-    </Segment>
-  );
-}
-
-function Info() {
-  return(
-    <Segment.Group>
-      <Segment>This calculator works with your keybaord! </Segment>
-      <Segment.Group raised >
-        <Segment> all the numbers ( 0 to 9 ), as well as + and - </Segment> 
-        <Segment> use X and / for multiply and divide </Segment> 
-        <Segment> 'Enter' and 'Delete' work like you expect</Segment>
-        <Segment> % to make a percentage, and '.' for a point</Segment>
-      </Segment.Group>
-    </Segment.Group>
-  );
-}
+import Cell from "./buttons/Cell";
+import Operator from "./buttons/Operator";
+import Command from "./buttons/Command";
+import Equals from "./buttons/Equals";
+import InputBar from "./InputBar";
+import Info from "./Info";
 
 class Calculator extends Component {
   constructor(props) {
