@@ -10,7 +10,7 @@ It supports key board commands, including:
 - `/` for divide
 - `+` for plus
 - `-` for minus
-- `*` for multiply
+- `*` or `x` for multiply
 - `Enter` or `=` for equals
 - `%` for percentage
 
