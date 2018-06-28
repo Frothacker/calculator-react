@@ -14,6 +14,6 @@ It supports key board commands, including:
 - `Enter` or `=` for equals
 - `%` for percentage
 
-Create React App was used to bootstrap this project and 
 
+Create React App was used to bootstrap this project  
 Styling is done through Semantic UI https://semantic-ui.com/
