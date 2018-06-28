@@ -1,8 +1,13 @@
 .container {
-  margin-top: 20px;
+  margin-top: 15px;
   width: 100px;
 }
 
 .ui.input>input {
   pointer-events: none;
+  background-color: #F1F1F1;
+}
+
+.footer {
+  margin: 100px;
 }

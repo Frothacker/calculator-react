@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Input, Container, Grid } from 'semantic-ui-react';
+import { Input, Container, Grid, Segment, Footer } from 'semantic-ui-react';
 import './index.css';
-
 
 function Operator(props) {
     let operatorStyle = { backgroundColor: "#FFA500" }
@@ -44,8 +43,7 @@ function Equals(props) {
     =
     </Grid.Column>
   );
-} // renderEquals end. 
-
+} 
 
 function Cell(props) {
   let cellStyle = {backgroundColor: "#FCFCFC"}
@@ -72,6 +70,28 @@ function InputBar(props) {
     value={props.value}
     onChange={props.onChange}
     />
+  );
+}
+
+function Foot() {
+  return(
+    <Segment className="footer">
+      Made by Finn
+    </Segment>
+  );
+}
+
+function Info() {
+  return(
+    <Segment.Group>
+      <Segment>This calculator works with your keybaord! </Segment>
+      <Segment.Group raised >
+        <Segment> all the numbers ( 0 to 9 ), as well as + and - </Segment> 
+        <Segment> use X and / for multiply and divide </Segment> 
+        <Segment> 'Enter' and 'Delete' work like you expect</Segment>
+        <Segment> % to make a percentage, and '.' for a point</Segment>
+      </Segment.Group>
+    </Segment.Group>
   );
 }
 
@@ -128,7 +148,8 @@ class Calculator extends Component {
       operator: i,
       equalsTriggered: 0,
       backupContent: null,
-      pressStyle: i }) 
+      pressStyle: i 
+    }) 
   }
 
   handleCommandClick(i) { 
@@ -139,15 +160,16 @@ class Calculator extends Component {
     } else if (i === "%") {
       result = x.content / 100
     } 
-      this.setState({
-        number: result,
-        placeholder: result,
-        content: result,
-        operator: '',
-        equalsTriggered: 0,
-        backupContent: null,
-        pressStyle: i  }) 
-    }
+    this.setState({
+      number: result,
+      placeholder: result,
+      content: result,
+      operator: '',
+      equalsTriggered: 0,
+      backupContent: null,
+      pressStyle: i  
+    }) 
+  }
 
   handleEqualsClick(i, width) {
     let x = this.state
@@ -181,7 +203,6 @@ class Calculator extends Component {
       equalsTriggered: (x.equalsTriggered + 1),
       backupContent: backupContent,
       pressStyle: "="
-
     })
   }
 
@@ -201,12 +222,10 @@ class Calculator extends Component {
     window.removeEventListener('keydown', (event) => this.updateInput(event.key) )
     window.removeEventListener('keyup', (event) => this.setState({ pressStyle: '' }) )
     window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
-
   }
 
   render() {
     let style = this.state.pressStyle
-
     return(
       <Container className="container">
         <InputBar 
@@ -249,9 +268,9 @@ class Calculator extends Component {
             <Equals style={style} onClick={ () => this.handleEqualsClick() }/>
           </Grid.Row>
         </Grid>
+        <Info />
       </Container> 
     );
   }
 }
-
 export default Calculator;
