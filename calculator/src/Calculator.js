@@ -90,7 +90,7 @@ class Calculator extends Component {
   }
 
   updateInput(key) {
-    let operators = ['-','/','*','+'] 
+    let operators = ['-','/','x','+'] 
     
     if ( parseInt(key) || key === "0") {  // if key is a number, handle click as integar. 
       this.handleCellClick(parseInt(key)) 
@@ -98,7 +98,7 @@ class Calculator extends Component {
       this.handleOperatorClick(key)
     } else if ( key === "%" ) { // handles case of "%" key input
       this.handleCommandClick("%")
-    } else if ( key === "*" ) { // handles case of "*" key input
+    } else if ( key === "*" ) { // handles case of "*" key input, becasue * needs to send "x" to handleOperatorClick
       this.handleOperatorClick("x")
     } else if ( key === "Enter" || key === "=" ) { // handles case of "=" and "enter" key inputs
       this.handleEqualsClick(key)
@@ -106,6 +106,8 @@ class Calculator extends Component {
       this.handleDeleteClick(key)
     } else if ( key === "c") { // handles clear input. 
       this.handleCommandClick("AC")
+    } else if ( key === ".") { // handles "." input. 
+      this.handleCellClick(".")
     } else {
       console.log( key +" is not an operator or a number")
     }
