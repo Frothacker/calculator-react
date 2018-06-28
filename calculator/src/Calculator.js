@@ -2,6 +2,79 @@ import React, { Component } from 'react';
 import { Input, Container, Grid } from 'semantic-ui-react';
 import './index.css';
 
+
+function Operator(props) {
+    let operatorStyle = { backgroundColor: "#FFA500" }
+    if (props.i === props.style) {
+      operatorStyle = { backgroundColor: "#D88C00"}
+    }
+    return (
+      <Grid.Column 
+      style={ operatorStyle } 
+      onMouseDown={ props.onClick }> 
+      {props.i}
+      </Grid.Column>
+    );
+  }
+
+function Command(props) {
+  let commandStyle = { backgroundColor: "#E1E1E1" }
+  if (props.i === props.style) {
+    commandStyle = { backgroundColor: "#D1D1D1"}
+  }
+  return (
+    <Grid.Column
+    width={ props.width }
+    style={ commandStyle } 
+    onMouseDown={ props.onClick }> 
+    {props.i}
+    </Grid.Column>
+  );
+}
+
+function Equals(props) {
+  let equalsStyle = { backgroundColor: "#FFA500" }
+  if ("=" === props.style) {
+    equalsStyle = { backgroundColor: "#D88C00"}
+  }
+  return (
+    <Grid.Column 
+    style={ equalsStyle } 
+    onMouseDown={props.onClick}> 
+    =
+    </Grid.Column>
+  );
+} // renderEquals end. 
+
+
+function Cell(props) {
+  let cellStyle = {backgroundColor: "#FCFCFC"}
+  if ( props.i === props.style ) {
+    cellStyle = {backgroundColor: "#E1E1E1"}
+  }
+  return (
+    <Grid.Column 
+    width={ props.width }
+    style={ cellStyle }
+    onMouseDown={ props.onClick } 
+    >
+    {props.i}
+    </Grid.Column>
+  );
+}
+
+function InputBar(props) {
+  return(
+    <Input 
+    fluid
+    className="input-bar"
+    placeholder={props.placeholder}
+    value={props.value}
+    onChange={props.onChange}
+    />
+  );
+}
+
 class Calculator extends Component {
   constructor(props) {
     super(props)
@@ -21,13 +94,17 @@ class Calculator extends Component {
     
     if ( parseInt(key) || key === "0") {  // if key is a number, handle click as integar. 
       this.handleCellClick(parseInt(key)) 
-    } else if ( operators.includes(key) ) {
+    } else if ( operators.includes(key) ) { // handles case of other operators key input
       this.handleOperatorClick(key)
-    } else if ( key === "Enter" || key === "=" ) {
+    } else if ( key === "%" ) { // handles case of "%" key input
+      this.handleCommandClick("%")
+    } else if ( key === "*" ) { // handles case of "*" key input
+      this.handleOperatorClick("x")
+    } else if ( key === "Enter" || key === "=" ) { // handles case of "=" and "enter" key inputs
       this.handleEqualsClick(key)
-    } else if ( key === "Backspace") { 
+    } else if ( key === "Backspace") { // handle backspace input
       this.handleDeleteClick(key)
-    } else if ( key === "c") { 
+    } else if ( key === "c") { // handles clear input. 
       this.handleCommandClick("AC")
     } else {
       console.log( key +" is not an operator or a number")
@@ -173,78 +250,6 @@ class Calculator extends Component {
       </Container> 
     );
   }
-}
-
-function Operator(props) {
-    let operatorStyle = { backgroundColor: "#FFA500" }
-    if (props.i === props.style) {
-      operatorStyle = { backgroundColor: "#D88C00"}
-    }
-    return (
-      <Grid.Column 
-      style={ operatorStyle } 
-      onMouseDown={ props.onClick }> 
-      {props.i}
-      </Grid.Column>
-    );
-  }
-
-function Command(props) {
-  let commandStyle = { backgroundColor: "#E1E1E1" }
-  if (props.i === props.style) {
-    commandStyle = { backgroundColor: "#D1D1D1"}
-  }
-  return (
-    <Grid.Column
-    width={ props.width }
-    style={ commandStyle } 
-    onMouseDown={ props.onClick }> 
-    {props.i}
-    </Grid.Column>
-  );
-}
-
-function Equals(props) {
-  let equalsStyle = { backgroundColor: "#FFA500" }
-  if ("=" === props.style) {
-    equalsStyle = { backgroundColor: "#D88C00"}
-  }
-  return (
-    <Grid.Column 
-    style={ equalsStyle } 
-    onMouseDown={props.onClick}> 
-    =
-    </Grid.Column>
-  );
-} // renderEquals end. 
-
-
-function Cell(props) {
-  let cellStyle = {backgroundColor: "#FCFCFC"}
-  if ( props.i === props.style ) {
-    cellStyle = {backgroundColor: "#E1E1E1"}
-  }
-  return (
-    <Grid.Column 
-    width={ props.width }
-    style={ cellStyle }
-    onMouseDown={ props.onClick } 
-    >
-    {props.i}
-    </Grid.Column>
-  );
-}
-
-function InputBar(props) {
-  return(
-    <Input 
-    fluid
-    className="input-bar"
-    placeholder={props.placeholder}
-    value={props.value}
-    onChange={props.onChange}
-    />
-  );
 }
 
 export default Calculator;
