@@ -139,6 +139,7 @@ class Calculator extends Component {
   }
 
   renderGridRow(numbers) {
+    let style = this.state.pressStyle
     return numbers.map( num => {
       return (
           <Grid.Row>
