@@ -193,6 +193,7 @@ class Calculator extends Component {
   render() {
     return(
       <Container className="container">
+      <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.3.1/semantic.min.css"></link>
         <InputBar 
           placeholder={this.state.placeholder}
           value={this.state.content} 
