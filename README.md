@@ -2,9 +2,6 @@
 React JS calculator 
 currently live on : https://calculator-xqruupvwfw.now.sh/
 
-To run the calculator, fork this repo
-Inside the 'calculator' directory, run `npm start`
-
 It supports key board commands, including:
 - All numbers, `0` to `9`
 - `.` for point
