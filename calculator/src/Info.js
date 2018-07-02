@@ -1,17 +1,20 @@
 import React from 'react';
-import { Segment } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 
 function Info() {
   return(
-    <Segment.Group>
-      <Segment>This calculator works with your keybaord! </Segment>
-      <Segment.Group raised >
-        <Segment> all the numbers ( 0 to 9 ), as well as + and - </Segment> 
-        <Segment> use X and / for multiply and divide </Segment> 
-        <Segment> 'Enter' and 'Delete' work like you expect</Segment>
-        <Segment> % to make a percentage, and '.' for a point</Segment>
-      </Segment.Group>
-    </Segment.Group>
+  
+    <Card fluid>
+      <Card.Content>
+        <Card.Header>This calculator loves your keybaord! </Card.Header>
+        <Card.Meta>Try using:</Card.Meta>
+        <Card.Description>
+            All the numbers 0 to 9, as well as '+' and '-' Use 'X' and '/' for multiply and divide <br />
+            <br /> 'Enter' and 'Delete' work like you expect. You can use '%' to form a percentage, and '.' for a decimal point.
+        </Card.Description>
+      </Card.Content>
+    </Card>
+  
   );
 }
 
