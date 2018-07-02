@@ -138,19 +138,6 @@ class Calculator extends Component {
     window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
   }
 
-  renderGridRow(numbers) {
-    let style = this.state.pressStyle
-    return numbers.map( num => {
-      return (
-          <Grid.Row>
-            <Command style={style} i="AC" width={4} onClick={ () => this.handleCommandClick("AC")} />
-            <Command style={style} i="+/-" width={4} onClick={ () => this.handleCommandClick("+/-")} />
-            <Command style={style} i="%" width={4} onClick={ () => this.handleCommandClick("%")} />
-            <Operator i="x" width={4} onClick={ () => this.handleOperatorClick("x") } style={style}/>
-          </Grid.Row>
-      )
-    })
-  }
 
   render() {
     let style = this.state.pressStyle
