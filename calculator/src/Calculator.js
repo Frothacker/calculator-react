@@ -140,6 +140,7 @@ class Calculator extends Component {
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   renderGridRow(numbers) {
     let style = this.state.pressStyle
     return numbers.map( num => {
@@ -154,6 +155,8 @@ class Calculator extends Component {
     })
   }
 
+=======
+>>>>>>> parent of 636e71a... simplified render method to prevent iteration
 =======
 >>>>>>> parent of 636e71a... simplified render method to prevent iteration
 =======
