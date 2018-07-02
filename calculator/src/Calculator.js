@@ -138,6 +138,7 @@ class Calculator extends Component {
     window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
   }
 
+<<<<<<< HEAD
   renderGridRow(numbers) {
     let style = this.state.pressStyle
     return numbers.map( num => {
@@ -152,6 +153,8 @@ class Calculator extends Component {
     })
   }
 
+=======
+>>>>>>> parent of 636e71a... simplified render method to prevent iteration
   render() {
     let style = this.state.pressStyle
     return(

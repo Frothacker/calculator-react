@@ -15,4 +15,4 @@ function Operator(props) {
     );
   }
 
-export default Operator;
+  export default Operator;
