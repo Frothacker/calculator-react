@@ -138,7 +138,6 @@ class Calculator extends Component {
     window.removeEventListener('mouseup', (event) => this.setState({ pressStyle: '' }) )
   }
 
-
   render() {
     let style = this.state.pressStyle
     return(
